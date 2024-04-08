@@ -1,0 +1,18 @@
+[
+  {
+    "title": "Nuevo Producto P001",
+    "description": "Nueva Descripción del Producto 2",
+    "price": 200,
+    "thumbnail": "nueva/ruta/imagen2.jpg",
+    "code": "P001",
+    "stock": 30
+  },
+  {
+    "title": "Producto 2",
+    "description": "Descripción del Producto 2",
+    "price": 150,
+    "thumbnail": "ruta/imagen2.jpg",
+    "code": "P002",
+    "stock": 20
+  }
+]

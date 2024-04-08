@@ -32,7 +32,7 @@ class ProductManager {
     }
   
     getProductById(id) {
-      const product = this.products.find((p) => p.id === id);
+      const product = this.products.find((p) => p.code === id);
       return product ? product : (console.log("Producto no encontrado"), null);
     }
   }
@@ -63,10 +63,14 @@ class ProductManager {
   
   // Obtener todos los productos
   const productos = productManager.getProducts();
-  console.log(productos);
+ // console.log(productos);
   
   // Obtener un producto por ID
-  const productoId1 = productManager.getProductById();
+  const productoId1 = productManager.getProductById("P001");
+  console.log(productoId1);
 
+
+
+  //
 
 
