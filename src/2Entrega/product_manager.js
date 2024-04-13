@@ -76,36 +76,64 @@ class ProductManager {
     }
   }
 
-  getProducts() {
-    return this.products;
-  }
+  getProducts(limit) {
+    // Si se proporciona un límite válido y mayor que 0, devuelve los primeros 'limit' productos
+    if (limit && limit > 0) {
+        return this.products.slice(0, limit);
+    } else {
+        // Si no se proporciona un límite válido o es 0, devuelve todos los productos
+        return this.products;
+    }
+}
+
 
   getProductById(id) {
     const product = this.products.find((p) => p.code === id);
     return product ? product : null;
   }
 
-  deleteProductById(id) {
+  async deleteProductById(id) {
+
     const index = this.products.findIndex((p) => p.code === id);
+    
     if (index !== -1) {
-        const deletedProduct = this.products[index]; // aca guardo el producto eliminado si lo llegar a necesitar
-        
-        // eleminio el producto el array
-        this.products.splice(index, 1);
-        
-        // esto lo hago para volver a grabar el txt productos con los cambios
-        fs.promises.writeFile(this.fileName, JSON.stringify(this.products, null, 2))
-            .then(() => {
-                console.log("Datos guardados en el archivo correctamente");
-                console.log("Producto eliminado correctamente:", deletedProduct); // Mensaje impreso con el producto eliminado
-            })
-            .catch((error) => console.error("Error al escribir en el archivo:", error.message));
-        
-    } else {
-        console.log("Producto no encontrado");
-        return null; 
+    
+    const deletedProduct = this.products[index];
+    
+    this.products.splice(index, 1);
+    
+    try {
+    
+    await fs.promises.writeFile(this.fileName, JSON.stringify(this.products, null, 2));
+    
+    console.log( "Datos guardados en el archivo correctamente");
+    
+    console.log ("Producto eliminado correctamente:", deletedProduct);
+    
+    return deletedProduct;
+    
+    } catch (error) {
+    
+    console.error("Error al escribir en el archivo:", error.message);
+    
+    return null;
+    
     }
-}
+    
+    } else {
+    
+    console.log("Producto no encontrado");
+    
+    return null;
+    
+    }
+    
+    }
+
+
+
+//aqui hice la correccion para que en la consola no aparezca undefind
+
 
 async updateProduct(id, updatedFields) {
   try {
@@ -135,35 +163,35 @@ async updateProduct(id, updatedFields) {
 }
 }
 
-
+export default ProductManager;
 
 
 //Ejemplo de uso
 const productManager = new ProductManager();
 
-// Obtener todos los productos
+ //Obtener todos los productos
 const productos = productManager.getProducts();
 console.log(productos);
 
 //Obtener un producto por ID
-const productoId1 = productManager.getProductById("P001");
-console.log(productoId1);
+//const productoId1 = productManager.getProductById("P001");
+//console.log(productoId1);
 
 // Borrar un producto y guardar el resultado en la variable 'eliminar'
-const eliminar = productManager.deleteProductById();
-console.log("Producto eliminado:", eliminar);
+//const eliminar = productManager.deleteProductById();
+//console.log("Producto eliminado:", eliminar);
 
 
 
 
 // Actualizar el producto con código 'P002'
-productManager.updateProduct("P001", {
-  title: "Nuevo Producto P001",
-  description: "Nueva Descripción del Producto 2",
-  price: 200,
-  thumbnail: "nueva/ruta/imagen2.jpg",
+//productManager.updateProduct("P001", {
+  //title: "Nuevo Producto P001",
+  //description: "Nueva Descripción del Producto 2",
+ // price: 200,
+  ////thumbnail: "nueva/ruta/imagen2.jpg",
   stock: 30
-});
+//});
 
 // Verificar los cambios en los productos
-console.log(productManager.getProducts());
+//console.log(productManager.getProducts());
