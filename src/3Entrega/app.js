@@ -18,28 +18,31 @@ app.get("/products", async (req, res) => {
 
 
 
-
 app.get("/products/:id", async (req, res) => {
     try {
-        // pongo el id en el navegador
+        // ingreso el id en la url
         const productId = req.params.id;
 
-        // Obtengo el producto del manger
-        const product = await manager.getProductById(productId);
+        // obtengo el producto de la funcion get
+        const product = manager.getProductById(productId);
 
-        // si encuentra el producto ?
+        // si 
         if (product) {
-            // encuentra 
-            res.status.json({ status: 1, payload: product });
+            // Si se encontró lo encuentro
+            res.status(200).json({ status: 1, payload: product });
         } else {
-            // no encuentra 
-            res.status.json({ status: 0, error: "Producto no encontrado" });
+            // Si no no lo encuentro
+
+            res.status(404).json({ status: 0, error: "Producto no encontrado" });
         }
     } catch (error) {
-        // paso algo que un error 
-        res.status.json({ status: 0, error: "Error al obtener el producto" });
+        // Si pasa algo error
+        res.status(500).json({ status: 0, error: "Error al obtener el producto" });
     }
 });
+
+
+
 
 app.listen(PORT, () => {
     console.log("Estoy escuchando en el puerto", PORT);
